@@ -1,0 +1,80 @@
+.productName1{
+position: absolute;
+width: 200px;
+left: 20vw;
+top: 17.7222vh;
+font-weight: 700;
+font-size: 1.0vw;
+color: #000000;
+}
+
+.productName2{
+position: absolute;
+width: 20.0418vw;
+height: 2.9862vh;
+left: 28.9306vw;
+top: 17.7222vh;
+font-weight: 100;
+font-size: 1.0vw;
+/*border: none;*/
+color: #000000;
+    }
+
+.ProductPw1{
+    position: absolute;
+    width: 200px;
+    left: 20vw;
+    top: 25.8528vh; 
+    font-weight: 700;
+    font-size: 1.0vw;
+    color: #000000;
+}
+
+.ProductPw2{
+box-sizing: border-box;
+position: absolute;
+width: 20.0416vw;
+height: 2.9862vh;
+left: 28.9306vw;
+top: 25.6528vh;
+border: 3px solid #FEBC3C;
+border-radius: 10px;
+font-size: 1.0vw;
+}
+
+.conditionBox{
+position: absolute;
+width: 20.0416vw;
+height: 16.9862vh;
+left: 28.9306vw;
+top: 32.6528vh;
+font-weight: 100;
+font-size: 0.6vw;
+line-height: 21px;
+
+color: #000000;
+}
+
+.BtnBox{
+    position: absolute;
+    width: 20.8333vw;
+    left: 29.4vw;
+    top: 58vh;
+}
+
+.submitBtn{
+    width: 4.5694vw;
+    height: 4.4vh;
+    background: #FFD74B;  
+    font-size: 0.8vw;
+    border: none;
+}
+
+.resetBtn{
+    width: 4.5694vw;
+    height: 4.4vh;
+    background: #FFD74B;  
+    font-size: 0.8vw;
+    border: none; 
+    margin-left: 1%;
+}

@@ -1,0 +1,11 @@
+.headerUl li+li{
+    border-left: 1px solid gray;
+}
+.headerUl li{
+    float: left;
+    padding:3px;
+    height:15px;
+}
+.headerUl{
+    list-style:none;
+}

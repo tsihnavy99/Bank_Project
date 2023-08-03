@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="account">
+	<resultMap id="account" type="com.temisone.bank.account.AccountVo">
+		<result column="account_no" property="accountNo"/>
+		<result column="account_pw" property="accountPw"/>
+		<result column="type_id" property="typeId"/>
+		<result column="account_middle" property="accountMiddle"/>
+		<result column="account_last" property="accountLast"/>
+		<result column="account_nickname" property="accountNickName"/>
+		<result column="account_myway" property="accountMyWay"/>
+		<result column="user_id" property="userId"/>
+		<result column="account_auto" property="accountAuto"/>
+		<result column="account_withdrawal" property="accountWithdrawal"/>
+		<result column="start_money" property="startMoney"/>
+		<result column="account_amount" property="accountAmount"/>
+	</resultMap>
+	
+	
+	<insert id="accountInsert" parameterType="com.temisone.bank.account.AccountVo">
+	
+	insert into 
+		ACCOUNT (
+				ACCOUNT_NO,
+				ACCOUNT_PW,
+				TYPE_ID,
+				ACCOUNT_MIDDLE,
+				ACCOUNT_LAST,
+				ACCOUNT_NICKNAME,
+				ACCOUNT_MYWAY,
+				USER_ID,
+				ACCOUNT_AUTO,
+				ACCOUNT_WITHDRAWAL,
+				START_MONEY,
+				ACCOUNT_AMOUNT) 
+		value (
+				(SELECT IFNULL(MAX(a.ACCOUNT_NO)+1,1) from ACCOUNT a),
+				#{accountPw},
+				110,
+				left(REGEXP_REPLACE(uuid(),'[a-z-]',''),3),
+				SUBSTRING(REGEXP_REPLACE(uuid(),'[a-z-]',''),5,6),
+				null,
+				null,
+				'hyj1077',
+				null,
+				null,
+				null,
+				0
+		)
+	
+	</insert>
+</mapper>

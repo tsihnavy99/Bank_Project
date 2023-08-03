@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="accountSub">
+	<resultMap id="accountSubVo" type="com.temisone.bank.AccountSub.AccountSubVo">
+		<result column="ACCOUNT_NO" property="accountNo"/>
+		<result column="ACCOUNT_PW" property="accountPw"/>
+		<result column="TYPE_ID" property="typeId"/>
+		<result column="ACCOUNT_MIDDLE" property="accountMiddle"/>
+		<result column="ACCOUNT_LAST" property="accountLast"/>
+		<result column="ACCOUNT_NICKNAME" property="accountNickname"/>
+		<result column="ACCOUNT_MYWAY" property="accountMyway"/>
+		<result column="USER_ID" property="userId"/>
+		<result column="ACCOUNT_AUTO" property="accountAuto"/>
+		<result column="ACCOUNT_WITHDRAWAL" property="accountWithdrawal"/>
+		<result column="START_MONEY" property="startMoney"/>
+		<result column="ACCOUNT_AMOUNT" property="accountAmount"/>
+		<result column="TYPE_NAME" property="typeName"/>
+	</resultMap>
+	<resultMap id="transactionDetailVo" type="com.temisone.bank.AccountSub.TransactionDetailVo">
+		<result column="TRANSACTION_NO" property="transactionNo"/>
+		<result column="TYPE_ID" property="typeId"/>
+		<result column="ACCOUNT_MIDDLE" property="accountMiddle"/>
+		<result column="ACCOUNT_LAST" property="accountLast"/>
+		<result column="SENDER" property="sender"/>
+		<result column="RECIPIENT" property="recipient"/>
+		<result column="DEPOSIT_AMOUNT" property="depositAmount"/>
+		<result column="WITHDRAWAL_AMOUNT" property="withdrawalAmount"/>
+		<result column="BALANCE" property="balance"/>
+		<result column="USER_ID" property="userId"/>
+		<result column="RECEIVE_ACCOUNT" property="receiveAccount"/>
+	</resultMap>
+	
+	<select id = "getAccounts" parameterType="com.temisone.bank.AccountSub.AccountSubVo" resultMap="accountSubVo">
+		SELECT *
+		FROM ACCOUNT
+		NATURAL JOIN ACCOUNT_TYPE
+		WHERE USER_ID= #{userId}
+	</select>
+	
+	<select id = "checkAccountNo" parameterType="com.temisone.bank.AccountSub.AccountSubVo" resultType="Integer">
+		SELECT COUNT(*)
+		FROM ACCOUNT
+		WHERE ACCOUNT_MYWAY = #{accountMyway}
+	</select>
+	
+	<select id = "setMyway" parameterType="com.temisone.bank.AccountSub.AccountSubVo">
+		UPDATE ACCOUNT
+		SET ACCOUNT_MYWAY = #{accountMyway}
+		WHERE USER_ID = #{userId} 
+			AND TYPE_ID = #{typeId}
+			AND ACCOUNT_MIDDLE = #{accountMiddle}
+			AND ACCOUNT_LAST = #{accountLast}
+	</select>
+	
+	<select id = "deleteMyway" parameterType="com.temisone.bank.AccountSub.AccountSubVo">
+		UPDATE ACCOUNT
+		SET ACCOUNT_MYWAY = NULL
+		WHERE USER_ID = #{userId} 
+			AND TYPE_ID = #{typeId}
+			AND ACCOUNT_MIDDLE = #{accountMiddle}
+			AND ACCOUNT_LAST = #{accountLast}
+	</select>
+	
+	<select id="accountTransfer" parameterType="com.temisone.bank.AccountSub.TransactionDetailVo">
+		INSERT INTO TRANSACTION_DETAILS 
+		(TRANSACTION_NO
+		, TYPE_ID
+		, ACCOUNT_MIDDLE 
+		, ACCOUNT_LAST 
+		, SENDER
+		, RECIPIENT 
+		, DEPOSIT_AMOUNT 
+		, WITHDRAWAL_AMOUNT 
+		, BALANCE 
+		, USER_ID )
+		VALUES
+		((SELECT CAST(IFNULL(MAX(TRANSACTION_NO),0) AS INTEGER)+1
+					FROM TRANSACTION_DETAILS ALIAS_FOR_SUBQUERY)
+		, #{typeId}
+		, #{accountMiddle}
+		, #{accountLast}
+		, (SELECT user_name
+			FROM tbl_user
+			WHERE user_id=#{userId})
+		, #{recipient}
+		, #{depositAmount}
+		, #{withdrawalAmount}
+		<choose>
+			<when test='#{withdrawalAmount}.toString()!="0"'>
+				, (SELECT CAST(ACCOUNT_AMOUNT AS INTEGER)-CAST(#{withdrawalAmount} AS INTEGER)
+				FROM ACCOUNT
+				WHERE TYPE_ID=#{typeId} AND ACCOUNT_MIDDLE=#{accountMiddle} AND ACCOUNT_LAST=#{accountLast})
+			</when>
+			<when test='#{depositAmount}.toString()!="0"'>
+				, (SELECT CAST(ACCOUNT_AMOUNT AS INTEGER)+CAST(#{depositAmount} AS INTEGER)
+				FROM ACCOUNT
+				WHERE TYPE_ID=#{typeId} AND ACCOUNT_MIDDLE=#{accountMiddle} AND ACCOUNT_LAST=#{accountLast})
+			</when>
+		</choose>		
+		, #{userId}
+		)
+	</select>
+	
+	<select id="updateAccountAmount" parameterType="com.temisone.bank.AccountSub.TransactionDetailVo">
+		UPDATE ACCOUNT
+		SET ACCOUNT_AMOUNT = 
+		<choose>
+			<when test="#{depositAmount}==null">
+				(SELECT CAST(ACCOUNT_AMOUNT AS INTEGER)-CAST(#{withdrawalAmount} AS INTEGER)
+					FROM ACCOUNT
+					WHERE TYPE_ID=#{typeId}
+						AND ACCOUNT_MIDDLE=#{accountMiddle}
+						AND ACCOUNT_LAST=#{accountLast})
+			</when>
+			<otherwise>
+				(SELECT CAST(ACCOUNT_AMOUNT AS INTEGER)+CAST(#{depositAmount} AS INTEGER)
+					FROM ACCOUNT
+					WHERE TYPE_ID=#{typeId}
+						AND ACCOUNT_MIDDLE=#{accountMiddle}
+						AND ACCOUNT_LAST=#{accountLast})
+			</otherwise>
+		</choose>
+		WHERE USER_ID = #{userId}
+			AND TYPE_ID=#{typeId}
+			AND ACCOUNT_MIDDLE=#{accountMiddle}
+			AND ACCOUNT_LAST=#{accountLast}
+	</select>
+	
+	<select id="getDetails" parameterType="com.temisone.bank.AccountSub.AccountSubVo" resultMap="transactionDetailVo">
+		SELECT *
+		FROM TRANSACTION_DETAILS
+		WHERE TYPE_ID=#{typeId} AND ACCOUNT_MIDDLE=#{accountMiddle} AND ACCOUNT_LAST=#{accountLast}
+	</select>
+</mapper>

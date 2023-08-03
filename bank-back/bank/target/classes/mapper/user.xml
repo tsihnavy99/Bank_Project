@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="user">
+	<resultMap id="user" type="com.temisone.bank.User.UserVo">
+		<result column="user_id" property="userId"/>
+		<result column="user_password" property="userPassword"/>
+		<result column="user_name" property="userName"/>
+		<result column="account_pw" property="accountPw"/>
+		<result column="user_birth" property="userBirth"/>
+		<result column="cert" property="cert"/>
+	</resultMap>
+	<resultMap id="cert" type="com.temisone.bank.User.CertVo">
+		<result column="cert_code" property="certCode"/>
+		<result column="cert_serial" property="certSerial"/>
+		<result column="user_id" property="userId"/>
+	</resultMap>
+	
+	<insert id = "insertUser" parameterType = "com.temisone.bank.User.UserVo">
+		insert into tbl_user values(
+			#{userId},
+			#{accountPw},
+			#{userBirth},
+			#{cert}
+		)
+	</insert>
+	<update id="updateUser" parameterType="com.temisone.bank.User.UserVo">
+		update tbl_user set cert = #{cert} where user_id = #{userId}
+	</update>
+	<select id="selectUser" parameterType="com.temisone.bank.User.UserVo" resultMap="user">
+		select 
+		user_id,
+		user_password,
+		account_pw,
+		user_birth,
+		cert,
+		user_name
+		from tbl_user where user_id = #{userId}
+	</select>
+	<select id="selectName" parameterType="com.temisone.bank.User.UserVo" resultMap="user">
+		select 
+		user_id,
+		user_password,
+		account_pw,
+		user_birth,
+		cert
+		from tbl_user where user_name = #{userName}
+	</select>
+	<insert id = "insertCert" parameterType="com.temisone.bank.User.CertVo">
+		insert into cert (cert_serial, user_id) values(#{certSerial},#{userId})
+	</insert>
+	<select id = "selectCert" parameterType="com.temisone.bank.User.UserVo" resultMap = "cert">
+		select * from cert where user_id = #{userId}
+	</select>
+	
+	<select id = "selectUserCount" resultType="int">
+		SELECT COUNT(*) FROM tbl_user;
+	</select>
+	
+</mapper>

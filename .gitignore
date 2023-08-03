@@ -1,0 +1,6 @@
+# ignore 'node_modules' folder
+bank-front/node_modules/
+
+# ignore files
+bank-front/**/googleAnalyticsKey.env
+bank-back/**/root-context.xml

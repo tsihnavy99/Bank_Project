@@ -1,0 +1,6 @@
+1667354116972	Rename package 'com.temisone.bank.Account'
+1667354127228	Rename type 'AccountController'
+1667354138302	Rename type 'AccountService'
+1667354151903	Rename type 'AccountDAO'
+1667354158934	Rename type 'AccountVo'
+1667354196469	Rename resource 'account.xml'

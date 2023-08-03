@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="accountAuto">
+	<resultMap id="accountAutoVo" type="com.temisone.bank.AccountAuto.AccountAutoVo">
+		<result column="auto_no" property="autoNo"/>
+		<result column="amount" property="amount"/>
+		<result column="period" property="period"/>
+		<result column="receive_account" property="receiveAccount"/>
+		<result column="type_id" property="typeId"/>
+		<result column="account_middle" property="accountMiddle"/>
+		<result column="account_last" property="accountLast"/>
+		<result column="account_no" property="accountNo"/>
+		<result column="user_id" property="userId"/>
+	</resultMap>
+	
+	<select id = "accountAutoList" parameterType="com.temisone.bank.AccountSub.AccountSubVo" resultMap="accountAutoVo">
+		SELECT *
+		FROM ACCOUNT_AUTO
+		WHERE USER_ID = #{userId}
+	</select>
+	
+	<select id = "checkReceiveAccountNo" parameterType="com.temisone.bank.AccountSub.AccountSubVo" resultType="Integer">
+		SELECT COUNT(*)
+		FROM ACCOUNT
+		WHERE (ACCOUNT_MYWAY = #{accountMyway})
+			OR
+			(TYPE_ID=#{typeId} AND ACCOUNT_MIDDLE=#{accountMiddle} AND ACCOUNT_LAST=#{accountLast})
+	</select>
+	
+	<select id="getRecipient" parameterType="com.temisone.bank.AccountSub.AccountSubVo" resultType="String">
+		SELECT user_name
+		FROM tbl_user
+		WHERE user_id=(SELECT USER_ID 
+					FROM ACCOUNT 
+					WHERE (ACCOUNT_MYWAY = #{accountMyway})
+						OR
+						(TYPE_ID=#{typeId} 
+						AND ACCOUNT_MIDDLE=#{accountMiddle} 
+						AND ACCOUNT_LAST=#{accountLast}))
+	</select>
+	
+	<select id = "addAccountAuto" parameterType="com.temisone.bank.AccountAuto.AccountAutoVo">
+		INSERT INTO 
+		ACCOUNT_AUTO
+		(AUTO_NO
+		, AMOUNT
+		, PERIOD
+		, RECEIVE_ACCOUNT
+		, TYPE_ID
+		, ACCOUNT_MIDDLE
+		, ACCOUNT_LAST
+		, USER_ID)
+		VALUES
+		((SELECT CAST(IFNULL(MAX(AUTO_NO),0) AS INTEGER)+1
+			FROM ACCOUNT_AUTO ALIAS_FOR_SUBQUERY)
+	    , #{amount}
+	    , #{period}
+	    , #{receiveAccount}
+	    , #{typeId}
+	    , #{accountMiddle}
+	    , #{accountLast}
+	    , #{userId})
+	</select>
+	
+	<select id="getAccountAuto" parameterType="com.temisone.bank.AccountAuto.AccountAutoVo" resultMap="accountAutoVo">
+		SELECT *
+		FROM ACCOUNT_AUTO
+		WHERE AUTO_NO = #{autoNo}
+	</select>
+	
+	<select id = "updateAccountAuto" parameterType="com.temisone.bank.AccountAuto.AccountAutoVo">
+		UPDATE ACCOUNT_AUTO 
+		SET AMOUNT = #{amount}
+			, PERIOD = #{period}
+		WHERE AUTO_NO = #{autoNo}
+	</select>
+	
+	<select id = "setAccountAuto" parameterType="com.temisone.bank.AccountAuto.AccountAutoVo">
+		UPDATE ACCOUNT
+		SET ACCOUNT_AUTO = 
+			(SELECT COUNT(*) 
+			FROM ACCOUNT_AUTO
+			WHERE USER_ID=#{userId}
+				AND TYPE_ID=#{typeId}
+				AND ACCOUNT_MIDDLE=#{accountMiddle}
+				AND ACCOUNT_LAST=#{accountLast})
+		WHERE USER_ID = #{userId}
+		AND TYPE_ID=#{typeId}
+				AND ACCOUNT_MIDDLE=#{accountMiddle}
+				AND ACCOUNT_LAST=#{accountLast}
+	</select>
+</mapper>
