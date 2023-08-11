@@ -2,9 +2,9 @@
 ( 현재 DB가 연결되어있지 않습니다. )
 
 ### 개발 환경 및 도구
-
+| | |
+|-|-|
 | Backend | java |
-| --- | --- |
 | Frontend | react.js, javascript, html, css |
 | DB | oracle, oracle cloud |
 | Framework | spring |
@@ -16,12 +16,12 @@
 ### 기능
 [ 담당 기능 ]
 - 계좌 관리 메뉴
+  - 계좌목록 및 입출금 기록 확인
+    ![image](https://github.com/tsihnavy99/Bank_Project/assets/70021587/abb30de5-9455-4e19-9ea1-1b45780637fd)
   - 계좌이체
     ![image](https://github.com/tsihnavy99/Bank_Project/assets/70021587/01b7a0c2-612f-44ed-a60f-909040da1e55)
   - 자동이체 설정
     ![image](https://github.com/tsihnavy99/Bank_Project/assets/70021587/813766a1-9cf2-45ec-8dee-a0310ed9f4ab)
-  - 계좌목록 및 입출금 기록 확인
-    ![image](https://github.com/tsihnavy99/Bank_Project/assets/70021587/66682f37-f967-4ab3-88fc-9e208f25c27f)
   - 내맘대로 계좌번호
     ![image](https://github.com/tsihnavy99/Bank_Project/assets/70021587/d989a9c0-318b-4b1f-a049-6534afabfff2)
 
