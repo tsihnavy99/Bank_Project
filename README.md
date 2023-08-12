@@ -2,7 +2,7 @@
 ( 현재 DB가 연결되어있지 않습니다. )
 
 ### 개발 환경 및 도구
-|  | 개발 화경/도구 |
+|  | 개발 환경/도구 |
 |-|-|
 | Backend | java |
 | Frontend | react.js, javascript, html, css |
