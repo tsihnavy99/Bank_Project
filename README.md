@@ -4,12 +4,11 @@
 ### 개발 환경 및 도구
 |  | 개발 환경/도구 |
 |-|-|
-| Backend | java |
-| Frontend | react.js, javascript, html, css |
-| DB | oracle, oracle cloud |
-| Framework | spring |
-| Tool | eclipse, figma |
-| API | mybatis, jpa |
+| Backend | Java, Spring |
+| Frontend | React.js, JavaScript, HTML, CSS |
+| DB | MariaDB |
+| Tool | Eclipse, VS Code, Figma |
+| API | MyBatis, JPA |
 
 <br>
 
@@ -28,7 +27,7 @@
 
 <br>
 
-[ 그 외 기능 ] : Back-end > Front-end 구현 X
+[ 그 외 기능 ] : (Back-end) > Front-end 구현 X
 - 회원 관리
     - 로그인/로그아웃 : NPKI 인증
     - 인증서 발급/삭제
