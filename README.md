@@ -7,8 +7,6 @@
 | Backend | Java, Spring |
 | Frontend | React.js, JavaScript, HTML, CSS |
 | DB | MariaDB |
-| Tool | Eclipse, VS Code, Figma |
-| API | MyBatis, JPA |
 
 <br>
 
